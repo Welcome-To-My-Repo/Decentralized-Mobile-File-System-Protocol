@@ -8,60 +8,72 @@ The Decentralized Mobile File System Protocol is (C)opyright Daniel
 Smith, 2017
 
 By posessing the Decentralized Mobile File System Protocol and any 
-implementation of the protocol, you agree to the terms of this 
+implementation of it, you agree to the terms of this 
 license
 
 1. - The License
->	This license applies to all versions of the Decentralized 
+	>This license applies to all versions of the Decentralized 
 	Mobile File System Protocol.
-	This license also applies to all implementations of the 
->	Decentralized Mobile File System Protocol.
-	If a newer version of this license exists, this document is 
-	no longer considered an official license. 
->	The terms of the most current version of this license shall 
+
+	>This license also applies to all implementations of the 
+	Decentralized Mobile File System Protocol. If a newer version
+	of this license exists, this document is no longer 
+	considered an official license.
+
+	>The terms of the most current version of this license shall 
 	be applied to anything that this license was previously 
 	applied to.
->	The most current version of this license may be found at 
+
+	>The most current version of this license may be found at 
 	https://github.com/fuckallyall/DMFS
 
 2. - Terms
->	"You" refers to the person(s) reading this license.
->	"Implementation" refers to any form of realization in whole 
+	>"You" refers to the person(s) reading this license.
+
+	>"Implementation" refers to any form of realization in whole 
 	or in part of the workings described in the Decentralized 
 	Mobile File System Protocol.
->	"Protocol" referse to the Decentralized Mobil File System 
+
+	>"Protocol" referse to the Decentralized Mobil File System 
 	Protocol.
 
 3. - Conditions of Use
->	The Decentralized Mobile File System Protocol shall be 
+	>The Decentralized Mobile File System Protocol shall be 
 	distributed free of charge.
->	You may not change the protocol or this license.
+
+	>You may not change the protocol or this license.
 	Only verbatim copies of the protocol and this license may be 
 	created.
->	Any copy of the protocol must be accompanied by a copy of 
+
+	>Any copy of the protocol must be accompanied by a copy of 
 	this license without exception.
 
 4. - Implementation
->	The protocol may be used without restriction, excepting this 
+	>The protocol may be used without restriction, excepting this 
 	license, to create implementations.
->	All implementations will conform to the specifications in the 
+
+	>All implementations will conform to the specifications in the 
 	protocol with no exceptions.
->	Any implementation produced must include the credit 
+
+	>Any implementation produced must include the credit 
 	"Decentralized Mobile File System Protocol (C)opyright Daniel 
 	Smith, 2017".
->	The GNU General Public License is a cancer on this world, and 
+	
+	>The GNU General Public License is a cancer on this world, and 
 	you are not obligated to distribute any source code or other 
 	specification of your implementation.
 
 5. - Violation
->	If you find yourself in violation of the terms of this 
+	>If you find yourself in violation of the terms of this 
 	license, you have a grace period of ten days
 	before you loose all rights to the protocol.
->	Should you fail to correct your violation after ten days, you 
+
+	>Should you fail to correct your violation after ten days, you 
 	must remove all copies of the protocol from your posession.
->	If you own an implementation and are in violation of the 
+	>If you own an implementation and are in violation of the 
 	license, you must include an explicit notice with your 
 	implementation stating that it violates this license.
+
 >	If you are not in violation of the license, you are free to 
 	obtain a copy of the protocol.
 	
