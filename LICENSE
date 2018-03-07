@@ -76,5 +76,29 @@ license
 
 >	If you are not in violation of the license, you are free to 
 	obtain a copy of the protocol.
-	
-                                                                     
+
+6. - Legal Issues
+	>This protocol details a system that is capable of both
+	storing and distributing information across the internet.
+	You are responsible for ensuring that your implementation 
+	meets all the related laws in the the locations where your
+	implementation is being used. 
+
+	>If there are any conditions that force you to contradict this
+	license, you are not excused from the terms of this license.
+
+7. - Warranty
+	>This protocol is provided "as is". There is no warranty for 
+	any aspect of this protocol. This does not limit any warranty 
+	that may be provided with implementations of this protocol.
+
+8. - Liability
+
+	>I, Daniel Smith, hold no liablilty for any form of damage or
+	loss that may result from use or misuse of this protocol and
+	any implementations.
+
+9. - Interpretation
+	>Sections 7 and 8 shall be interpreted in a manner that 
+	closest approximates an absolute waiver of civil liability in
+	connection with this protocol. 
