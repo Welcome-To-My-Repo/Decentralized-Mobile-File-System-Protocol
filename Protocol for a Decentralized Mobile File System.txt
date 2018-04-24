@@ -84,6 +84,7 @@ CONTENTS______________________________________________________________
 		carries information about the block, and one or more
 		layers of encryption surrounding either the piece of
 		a file or the whole block itself.
+
 		Any Block that is not formed properly according to
 		the parameters in this section will not be accepted
 		by the DMFS.
@@ -93,8 +94,10 @@ CONTENTS______________________________________________________________
 			The Header is a 432 bit section preceding the
 			File section. It contains the following
 			information in this order:
+
 			256 bit ID number for the file that the
-			File Section originated from
+			File Section originated from.
+
 			32 bit ID number for the block
 
 			The 128 bit identifying number of the User
@@ -102,7 +105,7 @@ CONTENTS______________________________________________________________
 
 			The size of the file section in bytes
 			stored by a 16 bit number. If the number is
-			leftat zero then the size of the file
+			left at zero then the size of the file
 			section is assumed to be 2 kilobytes.
 
 			The Header is required to be exactly 432 bits
@@ -118,17 +121,23 @@ CONTENTS______________________________________________________________
 			A layer of encryption can be placed over any
 			part of the Block, or around the complete
 			Block.
+
 			The Remote Deivce that applies the encryption
 			to the Block is responsible for storing the
 			keys to the encryption.
 
 3. REMOTE DEVICE NETWORK FUNCTIONS____________________________________
+
 	All communications between devices in a DMFS are performed
 	using a TCP connection. The act of communication happens
 	through the use of Message IDs. These are whole numerical
 	values sent from one Remote Device to another throuth the TCP
 	connection. They're used to represent specific messages that
 	would be sent through the network.
+
+	Message IDs are used in a strict set of protocols for
+	communication used by all devices in a DMFS.
+
 	A Message ID can represent the state of a Remote Device, a
 	request for data, or an error. A Signal cannot be used to
 	pass data that's stored in the DMFS. Message IDs are grouped
@@ -294,6 +303,7 @@ CONTENTS______________________________________________________________
 			respond saying resources are available or
 			giving an error that resources aren't
 			available.
+
 			If the recieving Device gave an affirmative,
 			the sending Device will send a single Block.
 			When requesting a Block the process of asking
@@ -310,13 +320,13 @@ CONTENTS______________________________________________________________
 			A Remote Device that encounters a request that
 			needs authentication will send Message 404 to
 			the Routing Device and the IP address of the
-			second Remote Device that needs to be verified.
-			The Routing Device will then send Message 402
-			to the second Remote Device. If the second
-			Remote Device provides the correct credentials,
-			the Routing Device will return an affirmative
-			message to the first Remote Device and the
-			operation will continue.
+			second Remote Device that needs to be
+			verified. The Routing Device will then send
+			Message 402 to the second Remote Device. If
+			the second Remote Device provides the correct
+			credentials, the Routing Device will return an
+			affirmative message to the first Remote Device
+			and the operation will continue.
 
 	3.2 ROUTING FUNCTIONS_________________________________________
 
@@ -373,6 +383,7 @@ CONTENTS______________________________________________________________
 			simply interact through the URL associated
 			with the DMFS regardless of the individual
 			addresses of the Routing Devices.
+
 			If the Routing Device(s) changes addresses and
 			the Remote Devices were relying on it's IP
 			address to interact with it, there is no good
@@ -384,6 +395,7 @@ CONTENTS______________________________________________________________
 
 		This section describes the processes of moving
 		information into a DMFS.
+
 		Before information is stored in a DMFS, it must be
 		converted into Blocks. The following diagrams show
 		the conversion processes for uploading and downloading
@@ -409,8 +421,8 @@ CONTENTS______________________________________________________________
 		its storage permanently available for use by the DMFS.
 		This reserved storage is where the Remote Device must
 		store all Blocks that it accepts. This portion of
-		storage can be released from use when the Remote Device
-		permanently ceases to be a part of any DMFS.
+		storage can be released from use when the Remote
+		Device permanently ceases to be a part of any DMFS.
 
 		If a Remote Device has already reserved storage for a
 		DMFS and then joins another DMFS, it is not required
@@ -422,12 +434,12 @@ CONTENTS______________________________________________________________
 		storage, it must notify the Routing Devices of all
 		DMFS networks it's connected to that it has no storage
 		available. The Remote Device has the choice to enlarge
-		its portion of storage or wait until Blocks are removed
-		and it has storage available again. In the event that
-		the Remote Device is able to store more Blocks again,
-		it must sent a message to the Routing Devices of all
-		the DMFS networks that it's connected to that it has
-		resources available.
+		its portion of storage or wait until Blocks are
+		removed and it has storage available again. In the
+		event that the Remote Device is able to store more
+		Blocks again, it must sent a message to the Routing
+		Devices of all the DMFS networks that it's connected
+		to that it has resources available.
 
 	5.2 MANAGING DEVICES__________________________________________
 
