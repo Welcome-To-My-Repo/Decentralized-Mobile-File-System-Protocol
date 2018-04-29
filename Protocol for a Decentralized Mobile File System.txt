@@ -432,7 +432,7 @@ CONTENTS______________________________________________________________
 		When Blocks are being stored in a DMFS, Remote Devices
 		that spend more time on average connected will receive
 		more Blocks. This increases the stability of the
-		DFMS as it increases the accessiblity of the
+		DFMS as it increases the Accessibility of the
 		information stored in the DMFS.
 
 5. RESOURCE MANAGEMENT________________________________________________
