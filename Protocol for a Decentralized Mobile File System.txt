@@ -273,6 +273,20 @@ CONTENTS______________________________________________________________
 			404. If the Remote Device in question is an
 			authentic user.
 
+		406 - Entering Network
+			This message is sent to the Routing Device
+			to alert it that this remote device is
+			accessible to the network. After recieving a
+			Message 100, the remote device will also send
+			its IP address.
+
+		407 - Leaving Network
+			This message is sent to the Routing Device to
+			alert it that this Remote Device is leaving
+			the network and will no longer be accessible.
+			The Routing Device will then remove this
+			Remote Device's address.
+
 		 ... - EMPTY
 			The following values have no messages assigned
 
