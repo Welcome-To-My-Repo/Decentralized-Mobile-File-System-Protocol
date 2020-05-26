@@ -1,0 +1,505 @@
+Protocol for a Decentralized Mobile File System
+
+Version 0.2
+
+(C)opyright May 2017 Daniel Smith
+
+______________________________________________________________________
+
+This document is the official description of the Decentralized Mobile
+File System (DMFS) Protocol.
+Distribution of this document is unlimited on the condition that any
+copy produced is identical to the original.
+
+CONTENTS______________________________________________________________
+
+1. Introduction
+	Explanations of the purpose of this document.
+
+2. Overview
+	General summary of the DMFS structure.
+
+3. Networking Functions
+	Details the functionality of devices in the network.
+
+4. Storage Functions
+	Details how information is managed in the network.
+
+5. Resource Management
+	Details how the network is managed
+
+1. INTRODUCTION_______________________________________________________
+
+	The objective of the DMFS protocol is to exist as an
+	alternative method of cloud storage. It will specifically
+	make improvements regarding resource and security limitations
+	that commonly occur in centralized cloud storage.
+
+	The idea behind a DMFS is that any data shared between devices
+	will only have meaning to the device it originated from. This
+	allows the information in the DMFS to be scattered as widely
+	as possible without being readable to attackers or loosing
+	its recoverability to users.
+
+2. OVERVIEW___________________________________________________________
+
+	This section will cover information and concepts that
+	universally pertain to the DMFS Protocol.
+
+	2.1 TERMINOLOGY_______________________________________________
+
+		This section lists terms that are specific to a DMFS.
+		The list only includes simple definitions because more
+		detail is provided in the sections below.
+
+	DMFS
+ 		The acronym for Decentralized Mobile File System
+
+	Block
+ 		The required universal format for moving stored
+ 		data in a DMFS.
+
+	Remote Device
+		Any computing device connected to a DMFS.
+
+	Routing Device
+		The device in a DMFS network responsible for
+		facilitating connections between all devices
+		in the network. A Routing Device is still a Remote
+		Device, but it requires its own definition because
+		of its unique role in a DMFS.
+
+	Message ID
+		A whole numerical value passed between Remote
+		Devices that is used to represent specific
+		messages.
+
+	Message Type
+		An organizational group that a Signal can belong
+		to.
+
+	2.2 THE BLOCK________________________________________________
+
+		This section defines what a Block is. Information
+		about how it's made and handled is included in other
+		sections.
+
+		Any data that is to be stored in the DMFS is passed
+		between devices in the format of a Block. A Block
+		contains a piece of a whole file, a header that
+		carries information about the block, and one or more
+		layers of encryption surrounding either the piece of
+		a file or the whole block itself.
+
+		Any Block that is not formed properly according to
+		the parameters in this section will not be accepted
+		by the DMFS.
+
+		2.2.1 THE HEADER______________________________________
+
+			The Header is a 432 bit section preceding the
+			File section. It contains the following
+			information in this order:
+
+			256 bit ID number for the file that the
+			File Section originated from.
+
+			32 bit ID number for the block
+
+			The 128 bit identifying number of the User
+			the Block belongs to.
+
+			The size of the file section in bytes
+			stored by a 16 bit number. If the number is
+			left at zero then the size of the file
+			section is assumed to be 2 kilobytes.
+
+			The Header is required to be exactly 432 bits
+			long.
+
+		2.2.2 THE FILE SECTION________________________________
+
+			The File Section contains a 256 Kilobyte long
+			section of a file.
+
+		2.2.3 ENCRYPTION______________________________________
+
+			A layer of encryption can be placed over any
+			part of the Block, or around the complete
+			Block.
+
+			The Remote Deivce that applies the encryption
+			to the Block is responsible for storing the
+			keys to the encryption.
+
+3. REMOTE DEVICE NETWORK FUNCTIONS____________________________________
+
+	All communications between devices in a DMFS are performed
+	using a TCP connection. The act of communication happens
+	through the use of Message IDs. These are whole numerical
+	values sent from one Remote Device to another through the TCP
+	connection. They're used to represent specific messages that
+	would be sent through the network.
+
+	All message IDs are sent in ASCII form to avoid endianness
+	confusion.
+
+	A Message ID can represent the state of a Remote Device, a
+	request for data, or an error. A Signal cannot be used to
+	pass data that's stored in the DMFS. Message IDs are grouped
+	into the following types:
+
+	DEVICE STATE
+
+		 100 - Message Received
+			Returned if the previous signal has been
+			successfully processed.
+
+		 101 - declares itself a Routing Device
+			Sent in response to Signal 202 if device is a
+			Routing Device
+
+		 102 - declares itself a Remote Device
+			Sent in response to Signal 202 if device is a
+			Remote Device
+
+		 103 - resources available
+			this message is sent to tell the receiving
+			Remote Device that the sending Device has
+			resources available for the receiving Device
+			to use.
+
+		 ... - EMPTY
+			The following values have no messages assigned
+
+	REQUEST
+
+		 200 - request for Block
+			This signal is sent followed by the ID number
+			of the block. Only one ID number can follow
+			this Signal as it represents a request for
+			only one block.
+
+		 201 - request for multiple blocks
+			This signal is followed by any amount of ID
+			numbers.
+
+		 202 - request what type of device
+			Sent to determine if the receiving device is a
+			Routing or Remote Device.
+
+		 203 - request memory for storage
+			this messsage is sent to let the receiving
+			Remote Device know that the sending Device
+			wants to store a block.
+			This message communicates the intent to store
+			only a single Block.
+
+		 204 - 	request credentials
+		 	this message is sent to an unauthenticated
+			Remote Device. That device will then send
+			the hashes of its username and password.
+
+		 ... - EMPTY
+			The follwoing values have no messages assigned
+
+	ERROR
+		 300 - generic "process failed" error
+			A catch all Signal that is returned when an
+			unknown error has occurred when a Remote
+			Device is attempting to satisfy a request.
+
+		 301 - Block not found
+			Returned and followed by the ID number of the
+			missing Block in response to Signals 200 and
+			201. This should not prevent the Remote Device
+			from returning Blocks that are present.
+
+		 302 - insufficient permission
+			Returned when a Remote Device cannot satisfy a
+			request because the requesting Remote Device
+			is not the owner of the Block and the Block's
+			permissions do not support the Remote Device's
+			access.
+
+		 303 - request signal out of order
+			Returned when there is missing data or
+			communication that should have preceded the
+			request.
+
+		 304 - not enough resources
+			Returned when the Remote Device cannot satisfy
+			the request because it lacks computing
+			resources
+
+		 305 - not enough memory
+			Returned when a Remote Device cannot store the
+			data given to it because it lacks the memory.
+
+		 ... - EMPTY
+			The following values have no messages assigned
+
+	ROUTING
+
+		 400 - request IP address
+			Sent to the Routing Device. The Routing Device
+			sould return a single IP address of a Remote
+			Device in the DMFS.
+
+		 401 - request multiple IP addresses
+			Sent to the Routing Device followed by the
+			number of IP addresses being requested. The
+			Routing Device should return that number of
+			IP addresses.
+
+		 402 - request authentication
+			send by the Routing Device to a Remote Device
+			in order to allow a certain action
+
+		 403 - request to join DMFS
+			sent to the Routing Device by a Remote Device
+			that wants to join the DMFS.
+
+		 404 - authenticate this device
+			This message is used by a Remote Device to
+			request that the Routing Device verify the
+			user account of a third Remote Device. After
+			this message is sent, the first Remote Device
+			will supply the IP address of the third Remote
+			Device that needs authentication.
+
+		405 - Device is verified
+			This message is sent in response to Message
+			404. If the Remote Device in question is an
+			authentic user.
+
+		406 - Entering Network
+			This message is sent to the Routing Device
+			to alert it that this remote device is
+			accessible to the network. After recieving a
+			Message 100, the remote device will also send
+			its IP address.
+
+		407 - Leaving Network
+			This message is sent to the Routing Device to
+			alert it that this Remote Device is leaving
+			the network and will no longer be accessible.
+			The Routing Device will then remove this
+			Remote Device's address.
+
+		 ... - EMPTY
+			The following values have no messages assigned
+
+	Note that not all numbers within the Signal Types have been
+	used. This allows more signals to be added in future versions
+	of the DMFS Protocol.
+
+	If a Signal has already been assigned a number, it cannot be
+	assigned to a new number. Additionally, each signal requires a
+	unique number. If a new signal is added to the Protocol, it
+	should be added to the next consecutive available number in
+	its Type.
+
+	3.1 COMMUNICATION FUNCTIONS___________________________________
+
+		A Remote Device may accept as many connections to
+		other Remote Devices as its system can handle.
+		After receiving any message or data, the Remote Device
+		should return Message 100 to the sending Device. If
+		the receiving Device doesn't return Message 100, the
+		sending Device should repeat sending the data or
+		message until it receives Message 100. Message 100
+		should never be returned in response to another
+		Message 100.
+
+		3.1.1 DATA REQUESTING_________________________________
+
+			This is the simplest function. A requesting
+			Device can send any Message from the 200 group
+			and the holding Device will send the
+			information requested.
+
+		3.1.2 BLOCK SENDING AND RECEIVING_____________________
+
+			In order to send a Block to another Device,
+			the sending Device needs to first send a
+			request for resources from the receiving
+			Device. The receiving Device can either
+			respond saying resources are available or
+			giving an error that resources aren't
+			available.
+
+			If the receiving Device gave an affirmative,
+			the sending Device will send a single Block.
+			When requesting a Block the process of asking
+			for resources is skipped. The requesting
+			Device requests a Block from the holding
+			Device. The holding Device then sends the
+			Block.
+
+		3.1.3 REMOTE DEVICE AUTHENTICATION____________________
+
+			If a Remote Device encounters another Remote
+			Device that needs authentication, it will send
+			message 404 to the Routing Device along with
+			the IP address of the unauthenticated Routing
+			Device. The Routing Device will then send
+			message 204 to the Remote Device. If the
+			Remote Device is authenticated, the Routing
+			Device will return message 405 to the Remote
+			Device that originally sent message 404.
+
+			The following processes require
+			authentication:
+
+				-storing Blocks in a Remote Device
+
+				-any request to a Routing Device
+
+	3.2 ROUTING FUNCTIONS_________________________________________
+
+		A Routing Device can be included in a DMFS network
+		that's managed by a separate Routing Device. It can
+		also include separate Routing Devices in its network.
+
+		Currently only one acting Routing Device per DMFS is
+		supported by this protocol. This will change in later
+		versions.
+
+		Routing Devices are capable of acting as a
+		traditional internet server. It will support a Domain
+		Name and will accept http traffic. Domain Names for
+		Routing Devices must be stored as an SRV record.
+
+		3.2.1 ADDING DEVICES__________________________________
+
+			A Remote Device that is not included in a DMFS
+			can send Message 403 to a Routing Device. The
+			Routing Device will expect the Remote Device
+			to then send a Username and a Password. They
+			should be sent to the Routing Device
+			separately.
+
+		3.2.2 REQUESTING IP ADDRESSES_________________________
+
+			When a Remote Device needs to communicate with
+			a second Remote Device, it asks the Routing
+			Device for one or more IP addresses.
+
+		3.2.3 ROUTING DEVICE AUTHENTICATION___________________
+
+			If a Routing Device encounters an
+			unauthenticated Remote Device, it will send
+			message 204 to it. If the Remote Device is
+			verified, then the Routing Device will
+			continue.
+
+	3.3 ALTERNATIVE CONNECTION METHODS____________________________
+
+		The default path of interaction between Remote Devices
+		is through an internet connection. Other remote
+		technologies can be used as well such as a Bluetooth
+		or Cellular connection.
+
+		3.3.1 ALTERNATE CONNECTION BEHAVIOR___________________
+
+			Because other connections may not give as easy
+			access to all Remote Devices in a DMFS as an
+			internet connection can, a Remote Device using
+			a supported alternative connection will have
+			to modify how it connects to the DMFS.
+			[explain modified behavior in Version 0.2]
+
+	3.4 CONNECTION ERRORS_________________________________________
+
+		If two Remote Devices are interacting and the
+		connection is suddenly lost, the Remote Device that
+		initiated the interrupted interaction will be
+		responsible for re-initiating the interaction again.
+
+		3.4.1 ROUTING DEVICE CHANGES IP ADDRESSES_____________
+
+			If the Routing Device(s) for the DMFS have a
+			domain name, then the Remote Devices can
+			simply interact through the URL associated
+			with the DMFS regardless of the individual
+			addresses of the Routing Devices.
+
+			If the Routing Device(s) changes addresses and
+			the Remote Devices were relying on it's IP
+			address to interact with it, there is no sure
+			way to recover the network. Each device in the
+			DMFS should keep a list of recently connected
+			IP addresses so that if the network fails,
+			Remote Devices can share connections that
+			still work with each other.
+
+4. DATA STORAGE FUNCTIONS_____________________________________________
+
+	4.1 UPLOADING AND DOWNLOADING PROCESSES_______________________
+
+		This section describes the processes of moving
+		information into a DMFS.
+
+	4.2 ALLOCATION________________________________________________
+
+		When Blocks are being stored in a DMFS, Remote Devices
+		that spend more time on average connected will receive
+		more Blocks. This increases the stability of the
+		DFMS as it increases the Accessibility of the
+		information stored in the DMFS.
+
+5. RESOURCE MANAGEMENT________________________________________________
+
+	All Remote Devices preform resource management tasks.
+
+	5.1 STORAGE MANAGEMENT________________________________________
+
+		A DMFS works by distributing the task of storing
+		information to all the devices in the network.
+		Each Remote Device must make at least one Gigabyte of
+		its storage permanently available for use by the DMFS.
+		This reserved storage is where the Remote Device must
+		store all Blocks that it accepts. This portion of
+		storage can be released from use when the Remote
+		Device permanently ceases to be a part of any DMFS.
+
+		If a Remote Device has already reserved storage for a
+		DMFS and then joins another DMFS, it is not required
+		to enlarge its current portion of storage or make a
+		new portion. Remote Devices can use the same portion
+		of storage for multiple DMFS networks.
+
+		When a Remote Device has used all its portion of
+		storage, it must notify the Routing Devices of all
+		DMFS networks it's connected to that it has no storage
+		available. The Remote Device has the choice to enlarge
+		its portion of storage or wait until Blocks are
+		removed and it has storage available again. In the
+		event that the Remote Device is able to store more
+		Blocks again, it must sent a message to the Routing
+		Devices of all the DMFS networks that it's connected
+		to that it has resources available.
+
+	5.2 ACCESS CONTROL__________________________________
+
+		A DMFS can exist in two different forms, open and
+		secured. An open DMFS will accept any Remote Device
+		into the network. A secured DMFS will only accept
+		Remote Devices with the correct credentials and uses
+		a basic username and password authentication system.
+
+		Routing Devices are responsible for authentication in
+		a secured DMFS. Every Remote Device will keep a list
+		of the usernames and passwords associated with each
+		Remote Device. Both the username and password will be
+		recorded only as a hash. The username is encrypted to
+		prevent any information about the Remote Devices being
+		usable if the Routing Device is compromised.
+
+		When a Remote Device is being authenticated, it must
+		send its username and password to other devices.
+		In order to protect their integrity, only the hashes
+		of these credentials will be sent. This way the
+		Routing Device can still authenticate the Remote
+		Device by comparing the hashes it receives.
