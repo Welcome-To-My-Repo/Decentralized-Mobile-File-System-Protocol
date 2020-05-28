@@ -165,13 +165,18 @@ Message IDs are grouped into the following types:
 		100 - Message Received
 			Returned if the previous signal has been successfully
 			processed.
+			This signal must be returned to the sending Remote
+			Device upon successfully receiving any Signal.
+			After this signal has been received both devices can
+			safely proceed with the protocol corresponding to the
+			initial signal sent by the sending Remote Device.
 
 		101 - device declares itself a Routing Device
 			Sent in response to Signal 202 if device is a routing
 			device.
 
 		102 - device declares itself a Remote Device
-			Sent in response to Signal 202 if devie is a Remote
+			Sent in response to Signal 202 if device is a Remote
 			Device.
 
 
@@ -179,10 +184,52 @@ Message IDs are grouped into the following types:
 			this message is sent to tell the receiving Remote Device
 			that the sending Device has resources available for the
 			receiving Device to use.
+			This signal is used to respond to 202. After this signal
+			is sent, the Remote Device should expect to receive a
+			single Block file for storage.
 
 		... EMPTY
-			The following values from 104 to 199 have no signal 
+			The following values from 104 to 199 have no signal
 			assigned.
+
+	REQUEST
+
+		200 - request for Block
+			This signal is sent followed by the ID number of the
+			block. Only one ID number can follow this Signal as it
+			represents a request for only one block.
+
+		201 - request for type of device
+			This signal corresponds to 101 and 102. It is sent
+			to determine if the receiving device is a Routing or
+			Remote Device.
+
+		202 - request storage
+			This signal is sent to let the receiving Remote Device
+			know that the sending Remote Device wants to store a
+			block. This signal communicates the intent to store only
+			a single Block. If the sending Remote Device receives a
+			103, it is allowed to send a single Block to the
+			receiving Remote Device.
+
+	ROUTING
+
+		300 - request IP address
+			Sent to the Routing Device. The Routing Device should
+			return a single IP address of a Remote Device in the
+			DMFS.
+			The address sent is decided by the Routing Device based
+			on factors such as the amount and availability of
+			resources on each Remote Device in the network.
+
+		402 - request authentication
+			Sent by the Routing Device to a Remote Device in order
+			to allow a certain action.
+
+		403 - request to join DMFS
+			sent to the Routing Device by a Remote Device that wants
+			to join the DMFS.
+
 5 RESOURCE MANAGEMENT __________________________________________________________
 
 	5.9 FILESYSTEM LIMITATIONS _____________________________________________
